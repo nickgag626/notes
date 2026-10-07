@@ -372,6 +372,37 @@ Open questions, each blocking the phase named:
 - [ ] Is there a staging or canary tenant on the redesigned Dashboard, and when? (Phase 4)
 - [ ] Does the Dashboard expose a UI locale switch? Only matters if Phase 5 is pursued.
 
+## Human checklist
+
+What the plan needs from a person, in order. Everything else is the agent's.
+
+### Before kickoff (about an hour)
+
+- [ ] Fresh clone of the docs-v2 fork on the work machine, on a branch off `main`, Node 22, with the notes repo cloned next to it.
+- [ ] Export two CSVs from the audit sheet: the `New Dashboard links` tab and the `Dashboard Screenshots` tab.
+- [ ] Paste the kickoff prompt from the appendix. The agent applies the files, runs the tests, builds the link map, runs the dry run, and stops with a report.
+
+### After the first report, before any link is rewritten (needs the team)
+
+- [ ] Decide the blessed tenant-agnostic URL form (Dashboard team question; raise at DOCS-5635). Nothing in Track 1 applies until this is answered.
+- [ ] Decide whether tenant-specific links are rewritten or left.
+- [ ] Resolve the unmatched tail the dry run surfaces: extend the sheet or give the agent the mapping. Expect a few dozen shapes.
+- [ ] Push the branches the agent prepares, one per section, and open the PRs. The agent never pushes.
+
+### Before screenshots (needs access, about half a day)
+
+- [ ] Create the demo tenant and a Management API M2M app; give the agent the domain and client id, keep the secret in the environment.
+- [ ] After the Deploy CLI import, create the users by hand: one admin without MFA for the capture login, plus three or four sample users.
+- [ ] Lock the alt-text format and update the Confluence style page.
+- [ ] Confirm `newPath` per manifest entry (the builder proposes one from the file name). This is the one per-entry task that stays with a person.
+- [ ] Fill `scripts/screenshots/dashboard-map.md` once the redesign is visible: left-nav structure, route shapes, stable selectors from the Dashboard team.
+- [ ] Log in once in the headed browser when the agent runs `npm run auth`, and again whenever the session expires.
+- [ ] Review captures: approve or send back, starting from the lowest `proposal.confidence` and `verification.score`. Review, not authoring.
+
+### Outside the team's control
+
+- [ ] Access to the redesigned Dashboard before launch (staging or canary tenant). Without it, Phase 4 runs the week after launch; links still ship on time.
+
 ## Appendix
 
 ### Kickoff prompt for the work Claude Code instance
