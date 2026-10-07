@@ -64,6 +64,23 @@ Seed the tenant once: `a0deploy import -c tenant/config.json -i tenant/tenant.ya
 - `crop`: the element whose bounding box becomes the image. `mask`: elements painted over before capture (secrets, dates, tenant names).
 - `status`: `pending` → `captured` (optional) → `approved` (human accepted the new image) → `rewritten` (set by `update-screenshot-refs.js --fix`).
 
+## Vision pass (optional, cuts manifest authoring to review)
+
+`propose.js` sends each old screenshot, its alt text, the surrounding MDX and the redesigned-Dashboard route catalog to Claude and gets back a proposed `dashboardUrl`, `steps`, `crop`, `mask`, `newPath` and `altText` with a confidence score. `verify` mode compares a new capture against the old screenshot and flags wrong screen, wrong state, cut-off content or leaked secrets.
+
+```bash
+export ANTHROPIC_API_KEY=...            # or ANTHROPIC_BASE_URL for an internal proxy
+npm run propose -- --limit=5 --dry-run  # prints the context that would be sent, no API call
+npm run propose -- --limit=20           # proposals saved under entry.proposal
+npm run propose -- --section=dashboard-applications --apply   # fill empty fields from proposals
+npm run verify -- --section=dashboard-applications             # after npm run capture
+```
+
+- Model defaults to `claude-opus-5` at `medium` effort; override with `--model=` / `--effort=` or `PROPOSE_MODEL`.
+- Fill `dashboard-map.md` with the redesigned navigation and stable selectors first. It is cached and sent with every request; it is the single biggest lever on proposal quality.
+- Proposals never set `status`, never clear `proposed`, and only fill fields that are empty. A human still confirms every entry; sort by `proposal.confidence` and start with the low ones.
+- `verification.score` and `verification.issues` on each entry drive the review order after a capture run.
+
 ## Review loop
 
 1. `npm run diff -- --grep @section`

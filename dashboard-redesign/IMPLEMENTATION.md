@@ -27,7 +27,7 @@ node --test scripts/lib/dashboard-links.test.js scripts/update-dashboard-links.t
 npm test               # root runner; must still pass and must not pick up scripts/screenshots/node_modules later
 ```
 
-Expected: 21 tests pass (17 link tests, 4 screenshot-ref tests). If `npm test` fails on Node 22 because of the glob, report it; do not change `package.json`.
+Expected: 27 tests pass (17 link tests, 4 screenshot-ref tests, 6 vision-pass tests). Add `scripts/screenshots/propose.test.js` to the command above; it runs without the SDK installed because the model client is injected. If `npm test` fails on Node 22 because of the glob, report it; do not change `package.json`.
 
 Append to `.gitignore`:
 
@@ -52,6 +52,7 @@ What was added:
 | `scripts/__fixtures__/dashboard-links/` | test fixtures |
 | `.github/workflows/dashboard-link-check.yml` | guardrail workflow |
 | `scripts/screenshots/` | Track 2 Playwright package, manifest tooling, tenant YAML; see its README |
+| `scripts/screenshots/propose.js`, `dashboard-map.md` | Vision pass: proposes capture instructions per entry and verifies new captures against old screenshots |
 
 ## Step 2: verify ground truth
 
@@ -142,6 +143,20 @@ node scripts/screenshots/build-manifest.js /path/to/dashboard-screenshots.csv
 Report: entries, multi-ref groups, twins added, refs not found, images missing. Then the human (or you, where obvious) fills per entry: `newPath` (and clears `proposed`), `altText` in the locked format, `dashboardUrl`, `steps`, `crop`, `mask`. Re-run with `--merge` after any sheet update to keep those fields.
 
 Dump images are proposed into `dashboard/unsorted/`; every one of those needs a real folder before capture. Use the naming convention in the plan.
+
+### Step 8b: vision pass to pre-fill the manifest
+
+Once the redesigned Dashboard is visible and `scripts/screenshots/dashboard-map.md` has its navigation and stable selectors filled in:
+
+```bash
+cd scripts/screenshots
+export ANTHROPIC_API_KEY=...                 # or ANTHROPIC_BASE_URL + key for the internal proxy
+npm run propose -- --limit=5 --dry-run       # inspect the context; no API call
+npm run propose -- --limit=5                 # sanity-check five proposals by hand
+npm run propose -- --apply                   # all pending entries
+```
+
+Report: count by confidence band (below 0.5, 0.5 to 0.8, above 0.8), every `needsHuman` note, and every proposal with `inCatalog: false`. The human reviews from lowest confidence up. After `npm run capture` for a section, run `npm run verify -- --section=<section>` and put entries with `verification.sameState: false` or `score` under 0.7 at the top of the review list. Cost guide: one image plus context is roughly 3,000 input tokens per entry, so a few hundred entries is a few dollars per pass at the default model.
 
 ## Step 9: rehearsal on ten entries
 

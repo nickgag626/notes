@@ -9,9 +9,13 @@
     "report": "node report.js",
     "build-manifest": "node build-manifest.js",
     "update-refs": "node update-screenshot-refs.js",
-    "test": "node --test update-screenshot-refs.test.js"
+    "propose": "node propose.js",
+    "verify": "node propose.js verify",
+    "test": "node --test update-screenshot-refs.test.js propose.test.js"
   },
   "devDependencies": {
-    "@playwright/test": "1.52.0"
+    "@anthropic-ai/sdk": "0.131.0",
+    "@playwright/test": "1.52.0",
+    "zod": "^4.0.0"
   }
 }
