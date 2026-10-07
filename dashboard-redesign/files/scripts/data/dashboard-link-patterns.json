@@ -1,0 +1,47 @@
+[
+  {
+    "pattern": "https://manage.auth0.com/#/applications/{id}/settings",
+    "replacement": "REPLACE_WITH_BLESSED_FORM/applications/{id}/settings",
+    "note": "application settings tab; {id} is a client id or a docs placeholder like {yourClientId}"
+  },
+  {
+    "pattern": "https://manage.auth0.com/#/applications/{id}/addons",
+    "replacement": "REPLACE_WITH_BLESSED_FORM/applications/{id}/addons",
+    "note": "application addons tab"
+  },
+  {
+    "pattern": "https://manage.auth0.com/#/applications/{id}/connections",
+    "replacement": "REPLACE_WITH_BLESSED_FORM/applications/{id}/connections",
+    "note": "application connections tab"
+  },
+  {
+    "pattern": "https://manage.auth0.com/#/applications/{id}/quickstart",
+    "replacement": "REPLACE_WITH_BLESSED_FORM/applications/{id}/quickstart",
+    "note": "application quickstart tab"
+  },
+  {
+    "pattern": "https://manage.auth0.com/#/security/{id}",
+    "replacement": "REPLACE_WITH_BLESSED_FORM/security/{id}",
+    "note": "security sub-page (attack-protection etc.)"
+  },
+  {
+    "pattern": "https://manage.auth0.com/#/universal-login/{id}",
+    "replacement": "REPLACE_WITH_BLESSED_FORM/universal-login/{id}",
+    "note": "universal login sub-page"
+  },
+  {
+    "pattern": "https://manage.auth0.com/#/tenant/{id}",
+    "replacement": "REPLACE_WITH_BLESSED_FORM/tenant/{id}",
+    "note": "tenant settings sub-page"
+  },
+  {
+    "pattern": "https://manage.auth0.com/#/externalapps/{id}/settings",
+    "replacement": "REPLACE_WITH_BLESSED_FORM/externalapps/{id}/settings",
+    "note": "SSO integration settings"
+  },
+  {
+    "pattern": "https://manage.auth0.com/#/connections/database/{id}/security",
+    "replacement": "REPLACE_WITH_BLESSED_FORM/connections/database/{id}/security",
+    "note": "database connection security tab"
+  }
+]

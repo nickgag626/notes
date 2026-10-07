@@ -378,8 +378,10 @@ Open questions, each blocking the phase named:
 
 Paste this as the first message in a session opened at the root of a fresh clone of the prod fork, on a branch off `main`.
 
+The finished scripts, tests, workflow and tenant YAML live in `dashboard-redesign/files/` in this repo, with step-by-step instructions in `dashboard-redesign/IMPLEMENTATION.md`. The agent applies them; it does not write them.
+
 ```markdown
-You are implementing the "Dashboard Redesign Docs Automation Plan" (attached) in this repo, a fork of auth0/docs-v2.
+You are implementing the "Dashboard Redesign Docs Automation Plan" in this repo, a fork of auth0/docs-v2. The plan is dashboard-redesign-docs-automation-plan.md and the step-by-step guide is dashboard-redesign/IMPLEMENTATION.md in the notes repo; the finished code is in dashboard-redesign/files/. Read both documents before doing anything.
 
 Hard rules:
 - Never push, never open or edit a PR, never create a fork. Prepare branches and commits locally and stop; I push.
@@ -390,10 +392,10 @@ Hard rules:
 Day one:
 1. Run the verification commands in the appendix and update the Ground truth table with today's numbers. Tell me what moved.
 2. I will give you two CSV exports from the audit sheet: the New Dashboard links tab and the Dashboard Screenshots tab. Convert the first to scripts/data/dashboard-link-map.json. Keep the second for build-manifest.js.
-3. Build scripts/lib/dashboard-links.js, scripts/lib/mdx.js, scripts/update-dashboard-links.js and its tests per Track 1. Run the dry run over all locales and main/ai. Give me the per-action, per-locale counts and the top 30 unmatched shapes.
+3. Apply dashboard-redesign/files/ to the repo (IMPLEMENTATION.md Step 1), run the tests, then run the Track 1 dry run over all locales and main/ai (Step 3). Give me the per-action, per-locale counts, the top 30 unmatched shapes, and the needs-human rows.
 4. Stop and report. Phase 1 starts after I answer the open questions.
 
-Work in this order: Track 1, Track 1b, Track 2b build-manifest, Track 2a tenant YAML, Track 2c, Track 2d. One commit per script with its tests. Ask before adding any dependency to the root package.json (the answer is no; nested packages only).
+Work through IMPLEMENTATION.md in order. One branch per section as it describes. Ask before adding any dependency to the root package.json (the answer is no; nested packages only).
 ```
 
 ### Verification commands
