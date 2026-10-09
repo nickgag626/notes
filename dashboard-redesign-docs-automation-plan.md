@@ -372,6 +372,52 @@ Open questions, each blocking the phase named:
 - [ ] Is there a staging or canary tenant on the redesigned Dashboard, and when? (Phase 4)
 - [ ] Does the Dashboard expose a UI locale switch? Only matters if Phase 5 is pursued.
 
+## Batch mode for screenshots
+
+Added 2026-10-09 after the first run. Track 1 finished in a day (PRs #2013 and #2001: 3,244 links rewritten, zero unmatched). Track 2 stalled at 40 captures in a day because the agent worked one entry at a time: open Chrome, inspect the DOM, write selectors, capture, look, commit. About ten minutes and one commit per screenshot. The vision pass was never run. At that rate the remaining entries are 80 hours. In batch they are about ten.
+
+### Scope first
+
+The manifest has 675 entries, not 819 rows, and most are not Dashboard screenshots. Triage from PR #2006:
+
+| Group | Count (approx) | Treatment |
+| --- | --- | --- |
+| Not the Dashboard: vendor consoles, Lock widget, diagrams, end-user login screens | ~250 | Status `out-of-scope`. The redesign does not change them. Report back to the sheet as "no change". Zero work. |
+| Forms pages | 82 | Blocked: the Forms route does not resolve on the demo tenant. One decision: enable Forms on the tenant, or keep the current images. |
+| B2B Connect, Security Center | ~12 | Blocked: Early Access or plan-gated. Ask support to enable on the demo tenant, or keep the current images. |
+| Activity and Insights charts | ~12 | Blocked: the tenant has no traffic, so charts render empty. Keep the current images, or seed synthetic traffic. |
+| Captured | 40 | Done. |
+| Pending | 188 | The actual work. Batch mode below. |
+
+### The loop to run
+
+Prerequisite: `scripts/screenshots/dashboard-map.md` is filled in with verified routes and selectors (done in PR #2006).
+
+1. Propose everything at once: `npm run propose -- --apply`. Every pending entry gets a `dashboardUrl`, `steps`, `crop` and `mask` drafted from its old screenshot, the surrounding MDX and the map. Minutes, a few dollars.
+2. Capture everything at once: `npm run capture`. Playwright runs the whole manifest unattended; 188 entries is well under an hour.
+3. Verify everything at once: `npm run verify`. Each new capture is scored against the old screenshot with concrete issues listed.
+4. Produce one report and stop: capture errors grouped by cause (selector not found, redirect, timeout), entries with `verification.score` under 0.7 with their issues, and nothing else.
+5. Fix only what the report names. Expect a third of entries to need a hand edit to `steps` or `crop`; the rest are done. Re-run steps 2 and 3 on the fixed subset with `--grep`.
+6. Commit per docs section, never per screenshot. Open screenshot PRs as drafts until launch.
+
+### Rules that keep it batch
+
+- Never author a manifest entry by hand before the vision pass has had a go at it.
+- Never commit a single screenshot.
+- Never spend time on an entry the verify report did not flag.
+- Blocked groups are one decision each, raised to the human, not investigated entry by entry.
+- A capture that fails twice after a hand edit goes to needs-human with a one-line note and the loop moves on.
+
+### Prompt for the agent
+
+```
+Stop capturing entries one at a time. Run the pipeline in batch per scripts/screenshots/README.md "Vision pass":
+propose --apply over all pending entries, then npm run capture for every entry with a dashboardUrl, then npm run verify.
+Report: capture errors grouped by cause, verify scores under 0.7 with their issues, and nothing else. Do not fix
+individual entries until I have seen that report. Mark the non-Dashboard needs-human entries as out-of-scope and
+list the three blocked groups (Forms, B2B Connect and Security Center, Insights) as decisions for me. Commit per section.
+```
+
 ## Human checklist
 
 What the plan needs from a person, in order. Everything else is the agent's.
